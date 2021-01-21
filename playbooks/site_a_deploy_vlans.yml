@@ -1,0 +1,9 @@
+---
+
+- name: "Deploy VLANs to switches"
+  gather_facts: yes
+  hosts:
+    - site_a
+
+  roles:
+    - role: deploy_vlans

@@ -1,0 +1,9 @@
+---
+
+- name: "Get switch-inventory"
+  gather_facts: yes
+  hosts:
+    - site_a
+
+  roles:
+    - role: list_switch_inventory

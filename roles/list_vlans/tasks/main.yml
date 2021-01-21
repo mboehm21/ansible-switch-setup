@@ -1,0 +1,27 @@
+---
+
+- name: Gather configured vlans (IOS)
+  cisco.ios.ios_vlans:
+    state: gathered
+  register: present_vlans_ios
+  when: ansible_network_os == "cisco.ios.ios"
+
+- name: Gather configured vlans (NXOS)
+  cisco.nxos.nxos_vlans:
+    state: gathered
+  register: present_vlans_nxos
+  when: ansible_network_os == "cisco.nxos.nxos"
+
+- name: Ensure the directory for the site is present
+  ansible.builtin.file:
+    path: "{{ playbook_dir }}/../data/{{ site_name | default(undefined_site) }}_vlan_db"
+    state: directory
+    mode: 0755
+  run_once: yes
+  delegate_to: localhost
+
+- name: Write vlan-information to file
+  ansible.builtin.template:
+    src: vlan_db.j2
+    dest: "{{ playbook_dir }}/../data/{{ site_name | default(undefined_site) }}_vlan_db/{{ vlan_db_filename }}"
+    mode: 0644

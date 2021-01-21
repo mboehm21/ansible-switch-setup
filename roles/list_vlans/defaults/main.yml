@@ -1,0 +1,3 @@
+---
+
+vlan_db_filename: "{{ ansible_net_hostname }}_{{ inventory_hostname }}.yml"

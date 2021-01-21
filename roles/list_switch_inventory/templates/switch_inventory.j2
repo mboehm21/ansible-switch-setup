@@ -1,0 +1,13 @@
+---
+
+{% for host in vars['play_hosts'] %}
+{{ hostvars[host]['inventory_hostname'] }}:
+  hostname: {{ hostvars[host]['ansible_net_hostname'] }} 
+  model: {{ hostvars[host]['ansible_net_model'] }}
+  serial: {{ hostvars[host]['ansible_net_serialnum'] }}
+  os: {{ hostvars[host]['ansible_net_iostype'] }} {{ hostvars[host]['ansible_net_version'] }}
+  image: {{ ansible_net_image }}
+{% if not loop.last %}
+
+{% endif %}
+{% endfor %}

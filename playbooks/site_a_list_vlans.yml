@@ -1,0 +1,9 @@
+---
+
+- name: "Gather VLANs of switches"
+  gather_facts: yes
+  hosts:
+    - site_a
+
+  roles:
+    - role: list_vlans

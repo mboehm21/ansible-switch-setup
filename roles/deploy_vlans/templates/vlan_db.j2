@@ -1,0 +1,10 @@
+---
+
+vlan_db:
+{% for item in present_vlans.gathered %}
+  - vlan_id: {{ item.vlan_id }}
+    name: {{ item.name }}
+    mtu: {{ item.mtu }}
+    state: {{ item.state }}
+    shutdown: {{ item.shutdown }}
+{% endfor %}

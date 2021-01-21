@@ -1,0 +1,75 @@
+---
+
+- name: Read vlan master-file
+  ansible.builtin.include_vars:
+    file: "{{ playbook_dir }}/../data/{{ site_name }}_vlan_db/{{ vlan_master_db_filename }}"
+    name: master
+  run_once: yes
+  delegate_to: localhost
+
+- name: Check where configuration is needed (IOS)
+  cisco.ios.ios_vlans:
+    config: "{{ master.vlan_db }}"
+    state: overridden
+  register: check_vlan_config_ios
+  check_mode: yes
+  when: ansible_network_os == "cisco.ios.ios"
+
+- name: Check where configuration is needed (NXOS)
+  cisco.nxos.nxos_vlans:
+    config: "{{ master.vlan_db }}"
+    state: overridden
+  register: check_vlan_config_nxos
+  check_mode: yes
+  when: ansible_network_os == "cisco.nxos.nxos"
+
+- name: Important information (unchanged)
+  debug:
+    msg: "OKAY: VLAN-database of {{ ansible_net_hostname }} is in sync with file data/{{ site_name }}_vlan_db/{{ vlan_master_db_filename }}"
+  when:
+    - ansible_network_os == "cisco.ios.ios" and not check_vlan_config_ios.changed or ansible_network_os == "cisco.nxos.nxos" and not check_vlan_config_nxos.changed
+
+- name: Important information (changed)
+  debug:
+    msg:
+      - "WARNING: VLAN-database of switch {{ ansible_net_hostname }} will be changed!"
+      - "Make sure data in file data/{{ site_name }}_vlan_db/{{ vlan_master_db_filename }} is correct or communication may be impacted."
+  when:
+    - ansible_network_os == "cisco.ios.ios" and check_vlan_config_ios.changed or ansible_network_os == "cisco.nxos.nxos" and check_vlan_config_nxos.changed
+
+- name: Asking for confirmation
+  ansible.builtin.pause:
+    prompt: Press ENTER if you want to continue to deploy the configuration to the switches. Press Ctrl+c / a to abort.
+  run_once: yes
+  when:
+    - ansible_network_os == "cisco.ios.ios" and check_vlan_config_ios.changed or ansible_network_os == "cisco.nxos.nxos" and check_vlan_config_nxos.changed
+
+- name: Deploy configuration (IOS)
+  cisco.ios.ios_vlans:
+    config: "{{ master.vlan_db }}"
+    state: overridden
+  register: deploy_vlan_config_ios
+  when:
+    - ansible_network_os == "cisco.ios.ios"
+
+- name: Deploy configuration (NXOS)
+  cisco.nxos.nxos_vlans:
+    config: "{{ master.vlan_db }}"
+    state: overridden
+  register: deploy_vlan_config_nxos
+  when:
+    - ansible_network_os == "cisco.nxos.nxos"
+
+- name: Write changes to startup-config (IOS)
+  cisco.ios.ios_config:
+    save_when: modified
+  when:
+    - ansible_network_os == "cisco.ios.ios"
+    - deploy_vlan_config_ios.changed
+
+- name: Write changes to startup-config (NXOS)
+  cisco.nxos.nxos_config:
+    save_when: modified
+  when:
+    - ansible_network_os == "cisco.nxos.nxos"
+    - deploy_vlan_config_nxos.changed

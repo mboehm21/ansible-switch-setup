@@ -1,0 +1,31 @@
+---
+
+all:
+  children:
+    site_a:
+      children:
+
+        ios_switches:
+          hosts:
+            192.168.120.253:
+              master_switch: yes
+          vars:
+            ansible_network_os: cisco.ios.ios
+            ansible_become: yes
+            ansible_become_method: enable
+
+      # nxos_switches:
+      #   hosts:
+      #     192.168.120.252:
+      #   vars:
+      #     ansible_network_os: cisco.nxos.nxos
+      #     ansible_become: yes
+      #     ansible_become_method: enable
+
+      vars:
+        site_name: SITE_A
+
+  vars:
+    ansible_connection: ansible.netcommon.network_cli
+    ansible_ssh_user: recover
+    ansible_ssh_pass: cisco
