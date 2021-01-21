@@ -1,5 +1,13 @@
 ---
 
+- name: Ensure the data directory is present
+  ansible.builtin.file:
+    path: "{{ playbook_dir }}/../data/"
+    state: directory
+    mode: 0755
+  run_once: yes
+  delegate_to: localhost
+
 - name: Write switch-inventory
   ansible.builtin.template:
     src: switch_inventory.j2
