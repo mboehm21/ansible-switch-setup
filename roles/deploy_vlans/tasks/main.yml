@@ -37,10 +37,15 @@
   when:
     - ansible_network_os == "cisco.ios.ios" and check_vlan_config_ios.changed or ansible_network_os == "cisco.nxos.nxos" and check_vlan_config_nxos.changed
 
+- name: Important information (list of switches to change)
+  debug:
+    msg: "{{ ansible_net_hostname }} / {{ inventory_hostname }}"
+  when:
+    - ansible_network_os == "cisco.ios.ios" and check_vlan_config_ios.changed or ansible_network_os == "cisco.nxos.nxos" and check_vlan_config_nxos.changed
+
 - name: Asking for confirmation
   ansible.builtin.pause:
-    prompt: Press ENTER if you want to continue to deploy the configuration to the switches. Press Ctrl+c / a to abort.
-  run_once: yes
+    prompt: "Press ENTER if you want to continue to deploy the configuration to the switches listed above. Press Ctrl+c / a to abort."
   when:
     - ansible_network_os == "cisco.ios.ios" and check_vlan_config_ios.changed or ansible_network_os == "cisco.nxos.nxos" and check_vlan_config_nxos.changed
 

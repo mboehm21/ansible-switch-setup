@@ -1,14 +1,21 @@
 ---
 
 - name: "Gather VLANs of master-switch"
-  gather_facts: yes
+  gather_facts: no
   hosts:
     - site_a
 
+  pre_tasks:
+    - name: Gather facts of master-switch
+      setup:
+      when:
+        - master_switch is defined
+        - master_switch|bool
+
   roles:
     - role: list_vlans
-      run_once: yes
       vars:
         vlan_db_filename: master.yml
       when:
-        - master_switch is defined 
+        - master_switch is defined
+        - master_switch|bool

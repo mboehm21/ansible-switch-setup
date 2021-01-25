@@ -12,7 +12,7 @@
   register: present_vlans_nxos
   when: ansible_network_os == "cisco.nxos.nxos"
 
-- name: Ensure the directory for the site is present
+- name: Ensure the directory-structure for the site is present
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory

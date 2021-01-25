@@ -3,13 +3,13 @@
 vlan_db:
 {% for item in present_vlans_ios.gathered %}
   - vlan_id: {{ item.vlan_id }}
-    name: {{ item.name }}
+    name: {{ item.name | default('""') }}
     state: {{ item.state }}
 {% endfor %}{% elif present_vlans_nxos.gathered is defined %}
 vlan_db:
 {% for item in present_vlans_nxos.gathered %}
   - vlan_id: {{ item.vlan_id }}
-    name: {{ item.name }}
+    name: {{ item.name | default('""') }}
     state: {{ item.state }}
 {% endfor %}
 {% endif %}
