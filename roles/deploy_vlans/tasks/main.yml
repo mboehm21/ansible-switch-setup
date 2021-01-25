@@ -61,6 +61,7 @@
   register: deploy_vlan_config_ios
   when:
     - ansible_network_os == "cisco.ios.ios"
+    - check_vlan_config_ios.changed
 
 - name: Deploy configuration (NXOS)
   cisco.nxos.nxos_vlans:
@@ -69,6 +70,7 @@
   register: deploy_vlan_config_nxos
   when:
     - ansible_network_os == "cisco.nxos.nxos"
+    - check_vlan_config_nxos.changed
 
 - name: Write changes to startup-config (IOS)
   cisco.ios.ios_config:
