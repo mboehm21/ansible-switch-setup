@@ -1,11 +1,29 @@
 ---
 
-- name: "Gather VLANs of master-switch"
+- name: Gather VLANs of master-switch
   gather_facts: no
   hosts:
     - site_a
 
   pre_tasks:
+    - name: Count defined master-switches
+      set_fact:
+        master_count: "{{ master_count | default(0) | int + 1 }}"
+      with_items: "{{ vars['play_hosts'] }}"
+      when:
+        - hostvars[item]["master_switch"] is defined
+        - hostvars[item]["master_switch"]|bool
+      run_once: yes
+
+    - name: Validate master-switches
+      assert:
+        that:
+          - master_count|int == 1
+        fail_msg: There must be exactly one master-switch. Please check your inventory-file. Aborting.
+        success_msg: One master-switch found in inventory.
+        quiet: yes
+      run_once: yes
+
     - name: Gather facts of master-switch
       setup:
       when:

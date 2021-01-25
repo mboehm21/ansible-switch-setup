@@ -26,28 +26,33 @@
 - name: Important information (unchanged)
   debug:
     msg: "OKAY: VLAN-database of {{ ansible_net_hostname }} is in sync with file data/{{ site_name }}_vlan_db/{{ vlan_master_db_filename }}"
-  when:
-    - ansible_network_os == "cisco.ios.ios" and not check_vlan_config_ios.changed or ansible_network_os == "cisco.nxos.nxos" and not check_vlan_config_nxos.changed
+  when: >
+    ansible_network_os == "cisco.ios.ios" and not check_vlan_config_ios.changed or
+    ansible_network_os == "cisco.nxos.nxos" and not check_vlan_config_nxos.changed
 
 - name: Important information (changed)
   debug:
     msg:
       - "WARNING: VLAN-database of switch {{ ansible_net_hostname }} will be changed!"
       - "Make sure data in file data/{{ site_name }}_vlan_db/{{ vlan_master_db_filename }} is correct or communication may be impacted."
-  when:
-    - ansible_network_os == "cisco.ios.ios" and check_vlan_config_ios.changed or ansible_network_os == "cisco.nxos.nxos" and check_vlan_config_nxos.changed
+  when: >
+    ansible_network_os == "cisco.ios.ios" and check_vlan_config_ios.changed or
+    ansible_network_os == "cisco.nxos.nxos" and check_vlan_config_nxos.changed
 
 - name: Important information (list of switches to change)
   debug:
     msg: "{{ ansible_net_hostname }} / {{ inventory_hostname }}"
-  when:
-    - ansible_network_os == "cisco.ios.ios" and check_vlan_config_ios.changed or ansible_network_os == "cisco.nxos.nxos" and check_vlan_config_nxos.changed
+  when: >
+    ansible_network_os == "cisco.ios.ios" and check_vlan_config_ios.changed or
+    ansible_network_os == "cisco.nxos.nxos" and check_vlan_config_nxos.changed
 
 - name: Asking for confirmation
   ansible.builtin.pause:
-    prompt: "Press ENTER if you want to continue to deploy the configuration to the switches listed above. Press Ctrl+c / a to abort."
-  when:
-    - ansible_network_os == "cisco.ios.ios" and check_vlan_config_ios.changed or ansible_network_os == "cisco.nxos.nxos" and check_vlan_config_nxos.changed
+    prompt: "Press ENTER deploy the configuration to switch {{ hostvars[item]['ansible_net_hostname'] }}. Type Ctrl+c / a to abort."
+  when: >
+    hostvars[item]["ansible_network_os"] == "cisco.ios.ios" and hostvars[item]["check_vlan_config_ios"].changed or
+    hostvars[item]["ansible_network_os"] == "cisco.nxos.nxos" and hostvars[item]["check_vlan_config_nxos"].changed
+  with_items: "{{ play_hosts }}"
 
 - name: Deploy configuration (IOS)
   cisco.ios.ios_vlans:
