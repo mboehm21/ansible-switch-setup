@@ -6,7 +6,7 @@
   model: {{ hostvars[host]['ansible_net_model'] }}
   serial: {{ hostvars[host]['ansible_net_serialnum'] }}
   os: {{ hostvars[host]['ansible_net_iostype'] | default('NXOS') }} {{ hostvars[host]['ansible_net_version'] }}
-  image: {{ ansible_net_image }}
+  image: {{ hostvars[host]['ansible_net_image'] }}
 {% if not loop.last %}
 
 {% endif %}
