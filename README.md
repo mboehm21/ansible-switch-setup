@@ -67,6 +67,7 @@ The following roles can be used in playbooks to perform certain actions on the s
 
 - list_switch_inventory
 - list_vlans
+- deploy_vlans
 
 Their usage is demonstrated in the example playbooks.
 
