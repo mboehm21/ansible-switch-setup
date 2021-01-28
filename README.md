@@ -61,7 +61,17 @@ all:
     ansible_ssh_user: myusername
     ansible_ssh_pass: mypassword
  ```
- 
+## Roles
+
+The following roles can be used in playbooks to perform certain actions on the switches.
+
+- list_switch_inventory
+- list_vlans
+
+Their usage is demonstrated in the example playbooks.
+
+### deploy_vlans
+
 ## Playbooks
 
 Please note that the playbooks are examples using the generic hosts-file. Make sure to adapt them to match the groups with your own infrastructure and hosts-file.
@@ -97,3 +107,47 @@ Example:
   os: IOS 15.0(2)SE2
   image: flash:c2960-lanbasek9-mz.150-2.SE2.bin
 ```
+
+#### site_a_list_vlans.yml
+
+This playbook creates one file per switch `data/<site_name>/<hostname>_<ip address>.yml` containing information about the configured VLANs in yaml-format.
+
+Example:
+
+```yaml
+---
+ 
+vlan_db:
+  - vlan_id: 1
+    name: default
+    state: active
+  - vlan_id: 200
+    name: LAN
+    state: active
+  - vlan_id: 300
+    name: LAB
+    state: active
+  - vlan_id: 400
+    name: VLAN0400
+    state: active
+  - vlan_id: 1002
+    name: fddi-default
+    state: active
+  - vlan_id: 1003
+    name: token-ring-default
+    state: active
+  - vlan_id: 1004
+    name: fddinet-default
+    state: active
+  - vlan_id: 1005
+    name: trnet-default
+    state: active
+```
+
+#### site_a_get_vlans_from_master.yml
+
+This playbook creates a file `data/<site_name>/master.yml` containing information about the configured VLANs on the master-swich. The format is the same as shown above. This is the reference for the vlan database of the whole domain. It can be modified in a text editor before deploying the vlans to all switches using the next playbook.
+
+#### site_a_deploy_vlans.yml
+
+This playbook reads the file `data/<site_name>/master.yml` and compares the vlan-databases of all switches in the group to it. Afterwards it lists all the switches where changes are needed and prompts the user whether or not the changes should be made to the switches.
