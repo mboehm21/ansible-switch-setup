@@ -71,8 +71,6 @@ The following roles can be used in playbooks to perform certain actions on the s
 
 Their usage is demonstrated in the example playbooks.
 
-### deploy_vlans
-
 ## Playbooks
 
 Please note that the playbooks are examples using the generic hosts-file. Make sure to adapt them to match the groups with your own infrastructure and hosts-file.
@@ -147,8 +145,20 @@ vlan_db:
 
 #### site_a_get_vlans_from_master.yml
 
-This playbook creates a file `data/<site_name>/master.yml` containing information about the configured VLANs on the master-swich. The format is the same as shown above. This is the reference for the vlan database of the whole domain. It can be modified in a text editor before deploying the vlans to all switches using the next playbook.
+This playbook creates a file `data/<site_name>/master.yml` containing information about the configured VLANs on the master-swich. The format is the same as shown above. This is the reference for the VLAN database of the whole domain. It can be modified in a text editor before deploying the vlans to all switches using the next playbook.
 
 #### site_a_deploy_vlans.yml
 
-This playbook reads the file `data/<site_name>/master.yml` and compares the vlan-databases of all switches in the group to it. Afterwards it lists all the switches where changes are needed and prompts the user whether or not the changes should be made to the switches.
+This playbook reads the file `data/<site_name>/master.yml` and compares the VLAN databases of all switches in the group to it. Afterwards it lists all the switches where changes are needed and prompts the user whether or not the changes should be made to the switches.
+
+To avoid service impact due to unintended changes to the VLAN databases it is recommended to compare the current VLANs of each switch before running this playbook. This can be done using the UNIX tool `diff`:
+
+```bash
+mboehm21@workstation:~/ansible-switch-setup/data/SITE_A_vlan_db$ diff -u basement-02_192.168.120.253.yml master.yml | grep -e "^[+-] "
+-  - vlan_id: 600
+-    name: VLAN0400
++  - vlan_id: 500
++    name: VLAN0500
+```
+
+In the above example VLAN 600 would be deleted and VLAN 500 would be added to the switch basement-02 when running the playbook.
