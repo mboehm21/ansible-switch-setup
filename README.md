@@ -61,6 +61,29 @@ all:
     ansible_ssh_user: myusername
     ansible_ssh_pass: mypassword
  ```
+
+### Confident data
+
+It is highly recommended to encrypt sensitive data like the value of `ansible_ssh_pass`. This can be done using Ansible Vault:
+
+```bash
+mboehm21@workstation:~/ansible-switch-setup$ set +o history
+mboehm21@workstation:~/ansible-switch-setup$ ansible-vault encrypt_string --name 'ansible_ssh_pass' 'mysecret'
+New Vault password: 
+Confirm New Vault password: 
+ansible_ssh_pass: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          65393764633861386365303762373239343364303435336436373164666262386433306132326565
+          3734303261643966386634343431323461376532326236640a313531663864363161633837363930
+          33643461656462346439326661313238613134363733653366653865643038326465313639633739
+          3737313332613562660a636639663239656633636664323032373833353930386365393334663063
+          3932
+Encryption successful
+mboehm21@workstation:~/ansible-switch-setup$ set -o history
+```
+
+Afterwards you can replace the cleartext variable in your inventory file with the encrypted string. When executing playbooks you need to use `--ask-vault-password` to tell Ansible to query your Vault password to decrypt the variable.
+
 ## Roles
 
 The following roles can be used in playbooks to perform certain actions on the switches.

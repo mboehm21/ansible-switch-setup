@@ -9,8 +9,6 @@ all:
           hosts:
             switch1:
               master_switch: yes
-            switch2:
-            switch3:
           vars:
             ansible_network_os: cisco.ios.ios
             ansible_become: yes
