@@ -16,7 +16,7 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    mode: 0755
+    mode: "{{ directory_permissions }}"
   with_items:
     - "{{ playbook_dir }}/../data/"
     - "{{ playbook_dir }}/../data/{{ site_name | default(undefined_site) }}_vlan_db"
@@ -27,4 +27,4 @@
   ansible.builtin.template:
     src: vlan_db.j2
     dest: "{{ playbook_dir }}/../data/{{ site_name | default(undefined_site) }}_vlan_db/{{ vlan_db_filename }}"
-    mode: 0644
+    mode: "{{ directory_permissions }}"

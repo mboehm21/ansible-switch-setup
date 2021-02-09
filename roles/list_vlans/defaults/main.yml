@@ -1,3 +1,6 @@
 ---
 
 vlan_db_filename: "{{ ansible_net_hostname }}_{{ inventory_hostname }}.yml"
+
+folder_permissions: 0770
+file_permissions: 0660

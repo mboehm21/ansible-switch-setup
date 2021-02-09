@@ -1,3 +1,6 @@
 ---
 
 switch_inventory_filename: "{{ site_name | default(undefined_site) }}_switch_inventory.yml"
+
+directory_permissions: 0770
+file_permissions: 0660

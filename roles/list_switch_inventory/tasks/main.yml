@@ -4,7 +4,7 @@
   ansible.builtin.file:
     path: "{{ playbook_dir }}/../data/"
     state: directory
-    mode: 0755
+    mode: "{{ directory_permissions }}"
   run_once: yes
   delegate_to: localhost
 
@@ -12,6 +12,6 @@
   ansible.builtin.template:
     src: switch_inventory.j2
     dest: "{{ playbook_dir }}/../data/{{ switch_inventory_filename }}"
-    mode: 0644
+    mode: "{{ file_permissions }}"
   run_once: yes
   delegate_to: localhost
