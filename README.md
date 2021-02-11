@@ -62,7 +62,7 @@ all:
     ansible_ssh_pass: mypassword
  ```
 
-### Confident data
+### Confidential data
 
 It is highly recommended to encrypt sensitive data like the value of `ansible_ssh_pass`. This can be done using Ansible Vault:
 
