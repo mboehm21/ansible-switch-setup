@@ -26,7 +26,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install Ansible.
-        run: pip3 install ansible-core
+        run: pip3 install ansible-base
 
       - name: Trigger a new import on Galaxy.
         run: ansible-galaxy collection publish --api-key ${{ secrets.GALAXY_API_KEY }} mboehm21.switch-setup
