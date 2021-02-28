@@ -1,0 +1,21 @@
+---
+
+extends: default
+
+rules:
+  line-length:
+    max: 200
+    level: warning
+  indentation:
+    spaces: 2
+  comments: disable
+  comments-indentation: disable
+  braces:
+    level: warning
+    max-spaces-inside: 10
+  truthy:
+    allowed-values:
+      - 'true'
+      - 'false'
+      - 'yes'
+      - 'no'

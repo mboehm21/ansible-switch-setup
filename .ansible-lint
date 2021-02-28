@@ -1,0 +1,6 @@
+parseable: true
+quiet: true
+use_default_rules: true
+verbosity: 0
+skip_list:
+  - no-handler
