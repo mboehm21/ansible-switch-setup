@@ -29,4 +29,6 @@ jobs:
         run: pip3 install ansible-base
 
       - name: Trigger a new import on Galaxy.
-        run: ansible-galaxy collection publish --api-key ${{ secrets.GALAXY_API_KEY }} mboehm21.switch-setup
+        run:
+          - ansible-galaxy collection build
+          - ansible-galaxy collection publish --api-key ${{ secrets.GALAXY_API_KEY }} *.tar.gz
