@@ -1,6 +1,6 @@
 # ansible-switch-setup
 
-This respository contains Ansible roles and playbook examples to manage the VLANs in multiple layer 2 domains consisting of Cisco IOS and NXOS switches. It has been created and tested under Ansible 2.10.2.
+This collection contains Ansible roles and playbook examples to manage the VLANs in multiple layer 2 domains consisting of Cisco IOS and NXOS switches. It has been created and tested under Ansible 2.10.2.
 
 ## Inventory
 

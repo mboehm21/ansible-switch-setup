@@ -53,6 +53,8 @@
     hostvars[item]["ansible_network_os"] == "cisco.ios.ios" and hostvars[item]["check_vlan_config_ios"].changed or
     hostvars[item]["ansible_network_os"] == "cisco.nxos.nxos" and hostvars[item]["check_vlan_config_nxos"].changed
   with_items: "{{ play_hosts }}"
+  tags:
+    - interactive
 
 - name: Deploy configuration (IOS)
   cisco.ios.ios_vlans:
