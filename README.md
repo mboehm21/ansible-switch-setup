@@ -88,6 +88,7 @@ Afterwards you can replace the cleartext variable in your inventory file with th
 
 The following roles can be used in playbooks to perform certain actions on the switches.
 
+- collect_facts
 - list_switch_inventory
 - list_vlans
 - deploy_vlans
@@ -104,11 +105,12 @@ A playbook for the testing-domain defined in the inventory above could be called
 ---
 
 - name: "Gather VLANs of all switches of the testing-domain"
-  gather_facts: yes
+  gather_facts: no
   hosts:
     - testing
 
   roles:
+    - role: collect_facts
     - role: list_vlans
 ```
 ### Functionality of the example playbooks

@@ -1,0 +1,11 @@
+---
+
+- name: Gather facts (IOS)
+  cisco.ios.ios_facts:
+    gather_subset: "{{ facts_subset }}"
+  when: ansible_network_os == "cisco.ios.ios"
+
+- name: Gather facts (NXOS)
+  cisco.nxos.nxos_facts:
+    gather_subset: "{{ facts_subset }}"
+  when: ansible_network_os == "cisco.nxos.nxos"
