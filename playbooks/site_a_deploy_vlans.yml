@@ -6,5 +6,5 @@
     - site_a
 
   roles:
-    - role: collect_facts 
+    - role: collect_facts
     - role: deploy_vlans
