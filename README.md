@@ -18,51 +18,48 @@ Example with two sites (production and testing):
 all:
   children:
     production:
-      children:
-
-        ios_switches:
-          hosts:
-            switch1.prod:
-              master_switch: yes
-            switch2.prod:
-          vars:
-            ansible_network_os: cisco.ios.ios
-            ansible_become: yes
-            ansible_become_method: enable
-
-        nxos_switches:
-          hosts:
-            switch3.prod:
-          vars:
-            ansible_network_os: cisco.nxos.nxos
-            ansible_become: yes
-            ansible_become_method: enable
-
+      hosts:
+        switch1.prod:
+          master_switch: yes
+        switch2.prod:
+        switch3.prod:
       vars:
         site_name: PRODUCTION_DOMAIN
 
     testing:
-      children:
-
-        ios_switches:
-          hosts:
-            switch1.test:
-              master_switch: yes
-            switch2.testing:
-            switch3.testing:
-          vars:
-            ansible_network_os: cisco.ios.ios
-            ansible_become: yes
-            ansible_become_method: enable
-
+      hosts:
+        switch1.testing:
+          master_switch: yes
+        switch2.testing:
+        switch3.testing:
       vars:
         site_name: TESTING_DOMAIN
+
+    nxos_switches:
+      hosts:
+        switch1.prod:
+        switch3.prod:
+        switch1.testing:
+        switch3.testing:
+      vars:
+        ansible_network_os: cisco.nxos.nxos
+        ansible_become: no
+        ansible_become_method: enable
+
+    ios_switches:
+      hosts:
+        switch2.prod:
+        switch2.testing:
+      vars:
+        ansible_network_os: cisco.ios.ios
+        ansible_become: no
+        ansible_become_method: enable
 
   vars:
     ansible_connection: ansible.netcommon.network_cli
     ansible_ssh_user: myusername
     ansible_ssh_pass: mypassword
- ```
+```
 
 ### Confidential data
 
